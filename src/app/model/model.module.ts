@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { ProductRepository } from './product.repository';
-import { StaticDataSource } from './static.datasource';
-
-@NgModule({
-  providers: [ProductRepository, StaticDataSource],
-})
-export class ModelModule {}
+// import { NgModule } from '@angular/core';
+// import { ProductRepositoryService } from './product.repository';
+// import { StaticDataSourceService } from './static.datasource';
+//
+// @NgModule({
+//   providers: [ProductRepositoryService, StaticDataSourceService],
+// })
+// export class ModelModule {}
