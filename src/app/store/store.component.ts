@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ProductRepositoryService } from '../model/product.repository';
 import { Product } from '../model/product.model';
+import { Cart } from '../model/cart.model';
 
 @Component({
   selector: 'app-store',
@@ -14,7 +15,10 @@ export class StoreComponent {
 
   selectedPage = 1;
 
-  constructor(private repository: ProductRepositoryService) {}
+  constructor(
+    private repository: ProductRepositoryService,
+    private cart: Cart
+  ) {}
 
   get products(): Product[] {
     let startFrom = (this.selectedPage - 1) * this.productsPerPage;
@@ -47,14 +51,7 @@ export class StoreComponent {
     );
   }
 
-  // get pageNumbers(): number[] {
-  //   return Array(
-  //     Math.ceil(
-  //       this.repository.getProducts(this.selectedCategory).length /
-  //         this.productsPerPage
-  //     )
-  //   )
-  //     .fill(0)
-  //     .map((_, i) => i + 1);
-  // }
+  addProductToCart(product: Product) {
+    this.cart.addLine(product);
+  }
 }

@@ -23,6 +23,7 @@ export class CounterDirective implements OnChanges {
     private template: TemplateRef<Object>
   ) {}
 
+  //при каждом нажатии на страницу перерисовывает темплейт
   ngOnChanges(changes: SimpleChanges) {
     this.container.clear();
     for (let i = 0; i < this.appCounter; i++) {
