@@ -28,7 +28,7 @@ export class Cart {
     } else {
       this.lines.push(new CartLine(product, quantity));
     }
-    // console.log(this.lines);
+    console.log(this.lines);
     this.recalculate();
   }
 

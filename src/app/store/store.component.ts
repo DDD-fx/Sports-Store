@@ -2,11 +2,16 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ProductRepositoryService } from '../model/product.repository';
 import { Product } from '../model/product.model';
 import { Cart } from '../model/cart.model';
+import { CartSummaryComponent } from './cart-summary/cart-summary.component';
+import { CounterDirective } from './counter.directive';
+import { CurrencyPipe, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CartSummaryComponent, CounterDirective, NgForOf, CurrencyPipe],
 })
 export class StoreComponent {
   selectedCategory: string | undefined;
@@ -53,5 +58,6 @@ export class StoreComponent {
 
   addProductToCart(product: Product) {
     this.cart.addLine(product);
+    console.log(this.cart);
   }
 }
