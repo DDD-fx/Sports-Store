@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CartService } from '../../model/cart.service';
+import { CurrencyPipe, NgForOf, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-detail',
-  template: `<div>
-    <h3 class="bg-info p-1 text-white">Cart Detail Component</h3>
-  </div>`,
+  templateUrl: 'cartDetail.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CurrencyPipe, RouterLink, NgForOf, NgIf],
 })
-export class CartDetailComponent {}
+export class CartDetailComponent {
+  constructor(public cart: CartService) {}
+}

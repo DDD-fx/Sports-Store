@@ -21,9 +21,7 @@ export class ProductRepositoryService {
   }
 
   getProducts(category?: string): Product[] {
-    return this.products.filter(
-      (p) => category == undefined || category == p.category
-    );
+    return this.products.filter((p) => category == undefined || category == p.category);
   }
 
   getCategories(): string[] {

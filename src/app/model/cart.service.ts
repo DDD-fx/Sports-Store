@@ -12,7 +12,7 @@ export class CartLine {
 @Injectable({
   providedIn: 'root',
 })
-export class Cart {
+export class CartService {
   public lines: CartLine[] = [];
 
   public itemCount: number = 0;
@@ -20,9 +20,7 @@ export class Cart {
   public cartPrice: number = 0;
 
   addLine(product: Product, quantity: number = 1) {
-    const line = this.lines.find(
-      (lineItem) => lineItem.product.id == product.id
-    );
+    const line = this.lines.find((lineItem) => lineItem.product.id == product.id);
     if (line != undefined) {
       line.quantity += quantity;
     } else {
@@ -33,9 +31,7 @@ export class Cart {
   }
 
   updateQuantity(product: Product, quantity: number) {
-    const line = this.lines.find(
-      (lineItem) => lineItem.product.id == product.id
-    );
+    const line = this.lines.find((lineItem) => lineItem.product.id == product.id);
     if (line != undefined) line.quantity = quantity;
     this.recalculate();
   }

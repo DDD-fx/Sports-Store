@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ProductRepositoryService } from '../model/product.repository';
 import { Product } from '../model/product.model';
-import { Cart } from '../model/cart.model';
+import { CartService } from '../model/cart.service';
 import { CartSummaryComponent } from './cart-summary/cart-summary.component';
 import { CounterDirective } from './counter.directive';
 import { CurrencyPipe, NgForOf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-store',
@@ -21,8 +22,9 @@ export class StoreComponent {
   selectedPage = 1;
 
   constructor(
-    private repository: ProductRepositoryService,
-    private cart: Cart
+    private readonly repository: ProductRepositoryService,
+    private readonly cart: CartService,
+    private readonly router: Router
   ) {}
 
   get products(): Product[] {
@@ -51,13 +53,12 @@ export class StoreComponent {
 
   get pageCount(): number {
     return Math.ceil(
-      this.repository.getProducts(this.selectedCategory).length /
-        this.productsPerPage
+      this.repository.getProducts(this.selectedCategory).length / this.productsPerPage
     );
   }
 
   addProductToCart(product: Product) {
     this.cart.addLine(product);
-    console.log(this.cart);
+    void this.router.navigateByUrl('/cart');
   }
 }
