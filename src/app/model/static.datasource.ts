@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Product } from './product.model';
 import { from, Observable } from 'rxjs';
 import { OrderService } from './order.service';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
+  useClass: ApiService,
 })
 export class StaticDataSourceService {
   private products: Product[] = [

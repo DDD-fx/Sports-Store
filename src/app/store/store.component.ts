@@ -28,6 +28,7 @@ export class StoreComponent {
   ) {}
 
   get products(): Product[] {
+    console.log('store');
     let startFrom = (this.selectedPage - 1) * this.productsPerPage;
     return this.repository
       .getProducts(this.selectedCategory)
