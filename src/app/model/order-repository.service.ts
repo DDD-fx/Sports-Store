@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OrderService } from './order.service';
-import { StaticDataSourceService } from './static.datasource';
 import { Observable } from 'rxjs';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class OrderRepositoryService {
   private orders: OrderService[] = [];
 
-  constructor(private dataSource: StaticDataSourceService) {}
+  constructor(private dataSource: ApiService) {}
 
   getOrders(): OrderService[] {
     return this.orders;
