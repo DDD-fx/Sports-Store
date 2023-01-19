@@ -4,15 +4,16 @@ import { Product } from '../model/product.model';
 import { CartService } from '../model/cart.service';
 import { CartSummaryComponent } from './cart-summary/cart-summary.component';
 import { CounterDirective } from './counter.directive';
-import { CurrencyPipe, NgForOf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgForOf } from '@angular/common';
 import { Router } from '@angular/router';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CartSummaryComponent, CounterDirective, NgForOf, CurrencyPipe],
+  imports: [CartSummaryComponent, CounterDirective, NgForOf, CurrencyPipe, AsyncPipe],
 })
 export class StoreComponent {
   selectedCategory: string | undefined;
@@ -27,14 +28,14 @@ export class StoreComponent {
     private readonly router: Router
   ) {}
 
-  get products(): Product[] {
+  get products$(): Observable<Product[]> {
     let startFrom = (this.selectedPage - 1) * this.productsPerPage;
     return this.repository
       .getProducts(this.selectedCategory)
-      .slice(startFrom, startFrom + this.productsPerPage);
+      .pipe(map((products) => products.slice(startFrom, startFrom + this.productsPerPage)));
   }
 
-  get categories(): string[] {
+  get categories$(): Observable<string[]> {
     return this.repository.getCategories();
   }
 
