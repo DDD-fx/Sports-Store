@@ -4,23 +4,29 @@ import { Product } from '../model/product.model';
 import { CartService } from '../model/cart.service';
 import { CartSummaryComponent } from './cart-summary/cart-summary.component';
 import { CounterDirective } from './counter.directive';
-import { AsyncPipe, CurrencyPipe, NgForOf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgForOf, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CartSummaryComponent, CounterDirective, NgForOf, CurrencyPipe, AsyncPipe],
+  imports: [CartSummaryComponent, CounterDirective, NgForOf, CurrencyPipe, AsyncPipe, NgIf],
 })
 export class StoreComponent {
-  selectedCategory: string | undefined;
+  selectedCategory$ = new BehaviorSubject<string | undefined>(undefined);
 
-  productsPerPage = 4;
+  productsPerPage$ = new BehaviorSubject<number>(4);
 
-  selectedPage = 1;
+  selectedPage$ = new BehaviorSubject<number>(1);
+
+  products$ = this.getProducts();
+
+  categories$ = this.getCategories();
+
+  pageCount$ = new BehaviorSubject<number>(1);
 
   constructor(
     private readonly repository: ProductRepositoryService,
@@ -28,37 +34,39 @@ export class StoreComponent {
     private readonly router: Router
   ) {}
 
-  get products$(): Observable<Product[]> {
-    let startFrom = (this.selectedPage - 1) * this.productsPerPage;
-    return this.repository
-      .getProducts(this.selectedCategory)
-      .pipe(map((products) => products.slice(startFrom, startFrom + this.productsPerPage)));
-  }
-
-  get categories$(): Observable<string[]> {
-    return this.repository.getCategories();
-  }
-
-  changeCategory(newCategory?: string) {
-    this.selectedCategory = newCategory;
-  }
-
-  changePage(newPage: number) {
-    this.selectedPage = newPage;
-  }
-
-  changePageSize(newSize: string) {
-    this.productsPerPage = Number(newSize);
-    this.changePage(1);
-  }
-
-  get pageCount(): number {
-    return Math.ceil(
-      this.repository.getProducts(this.selectedCategory).length / this.productsPerPage
+  getProducts(): Observable<Product[]> {
+    return combineLatest([
+      this.repository.getProducts(this.selectedCategory$),
+      this.selectedPage$,
+      this.productsPerPage$,
+    ]).pipe(
+      map(([products, selectedPage, productsPerPage]) => {
+        this.pageCount$.next(Math.ceil(products.length / productsPerPage));
+        const startFrom = (selectedPage - 1) * productsPerPage;
+        return products.slice(startFrom, startFrom + productsPerPage);
+      })
     );
   }
 
-  addProductToCart(product: Product) {
+  getCategories(): Observable<string[]> {
+    return this.repository.getCategories();
+  }
+
+  changeCategory(newCategory: string | undefined = undefined): void {
+    this.selectedCategory$.next(newCategory);
+    this.changePage(1);
+  }
+
+  changePage(newPage: number): void {
+    this.selectedPage$.next(newPage);
+  }
+
+  changePageSize(newSize: string): void {
+    this.productsPerPage$.next(Number(newSize));
+    if (Number(newSize) > this.pageCount$.value) this.changePage(1);
+  }
+
+  addProductToCart(product: Product): void {
     this.cart.addLine(product);
     void this.router.navigateByUrl('/cart');
   }

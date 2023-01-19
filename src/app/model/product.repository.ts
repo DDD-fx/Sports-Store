@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Product } from './product.model';
-import { StaticDataSourceService } from './static.datasource';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductRepositoryService {
-  private products$: Observable<Product[]> = this.dataSource.getProducts();
+  public products$: Observable<Product[]> = this.dataSource.getProducts();
 
-  constructor(private dataSource: StaticDataSourceService) {}
+  constructor(private dataSource: ApiService) {}
 
-  getProducts(category?: string): Observable<Product[]> {
-    return this.products$.pipe(
-      map((products) => products.filter((p) => category == undefined || category == p.category))
+  getProducts(category$: BehaviorSubject<string | undefined>): Observable<Product[]> {
+    return combineLatest([this.products$, category$]).pipe(
+      map(([products, cat]) => products.filter((p) => cat == undefined || cat == p.category))
     );
   }
 

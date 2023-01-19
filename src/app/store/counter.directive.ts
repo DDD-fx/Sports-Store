@@ -19,19 +19,13 @@ export class CounterDirective implements OnChanges {
   @Input('appCounterOf')
   appCounter: number = 0;
 
-  constructor(
-    private container: ViewContainerRef,
-    private template: TemplateRef<Object>
-  ) {}
+  constructor(private container: ViewContainerRef, private template: TemplateRef<Object>) {}
 
   //при каждом нажатии на страницу перерисовывает темплейт
   ngOnChanges(changes: SimpleChanges) {
     this.container.clear();
     for (let i = 0; i < this.appCounter; i++) {
-      this.container.createEmbeddedView(
-        this.template,
-        new CounterDirectiveContext(i + 1)
-      );
+      this.container.createEmbeddedView(this.template, new CounterDirectiveContext(i + 1));
     }
   }
 }
