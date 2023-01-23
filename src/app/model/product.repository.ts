@@ -7,9 +7,9 @@ import { ApiService } from '../api/api.service';
   providedIn: 'root',
 })
 export class ProductRepositoryService {
-  public products$: Observable<Product[]> = this.dataSource.getProducts();
+  public products$: Observable<Product[]> = this.apiService.getProducts();
 
-  constructor(private dataSource: ApiService) {}
+  constructor(private apiService: ApiService) {}
 
   getProducts(category$: BehaviorSubject<string | undefined>): Observable<Product[]> {
     return combineLatest([this.products$, category$]).pipe(

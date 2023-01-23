@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { OrderRepositoryService } from '../../model/order-repository.service';
 import { OrderService } from '../../model/order.service';
 import { FormsModule, NgForm } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { catchError, ignoreElements, Observable, of } from 'rxjs';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-checkout',
@@ -11,23 +13,34 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['checkout.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, NgIf, RouterLink],
+  imports: [FormsModule, NgIf, RouterLink, AsyncPipe, NgSwitch, NgSwitchCase, NgSwitchDefault],
 })
 export class CheckoutComponent {
   orderSent: boolean = false;
 
   submitted: boolean = false;
 
-  constructor(public repository: OrderRepositoryService, public order: OrderService) {}
+  submitResponse$: Observable<HttpResponse<OrderService>> | null = null;
+
+  submitError$: Observable<HttpErrorResponse> | null = null;
+
+  constructor(
+    public orderRepositoryService: OrderRepositoryService,
+    public orderService: OrderService
+  ) {}
 
   submitOrder(form: NgForm) {
     this.submitted = true;
     if (form.valid) {
-      this.repository.saveOrder(this.order).subscribe((order) => {
-        this.order.clear();
-        this.orderSent = true;
-        this.submitted = false;
-      });
+      this.submitResponse$ = this.orderRepositoryService.saveOrder(this.orderService);
+      this.submitError$ = this.submitResponse$.pipe(
+        ignoreElements(),
+        catchError((err: HttpErrorResponse) => of(err))
+      );
+
+      this.orderService.clear();
+      this.orderSent = true;
+      this.submitted = false;
     }
   }
 }

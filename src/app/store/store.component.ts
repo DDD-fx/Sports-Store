@@ -29,14 +29,14 @@ export class StoreComponent {
   pageCount$ = new BehaviorSubject<number>(1);
 
   constructor(
-    private readonly repository: ProductRepositoryService,
+    private readonly productRepositoryService: ProductRepositoryService,
     private readonly cart: CartService,
     private readonly router: Router
   ) {}
 
   getProducts(): Observable<Product[]> {
     return combineLatest([
-      this.repository.getProducts(this.selectedCategory$),
+      this.productRepositoryService.getProducts(this.selectedCategory$),
       this.selectedPage$,
       this.productsPerPage$,
     ]).pipe(
@@ -49,7 +49,7 @@ export class StoreComponent {
   }
 
   getCategories(): Observable<string[]> {
-    return this.repository.getCategories();
+    return this.productRepositoryService.getCategories();
   }
 
   changeCategory(newCategory: string | undefined = undefined): void {
