@@ -5,7 +5,7 @@ import { CartService } from '../model/cart.service';
 import { CartSummaryComponent } from './cart-summary/cart-summary.component';
 import { CounterDirective } from './counter.directive';
 import { AsyncPipe, CurrencyPipe, NgForOf, NgIf } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
 @Component({
@@ -13,7 +13,15 @@ import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
   templateUrl: './store.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CartSummaryComponent, CounterDirective, NgForOf, CurrencyPipe, AsyncPipe, NgIf],
+  imports: [
+    CartSummaryComponent,
+    CounterDirective,
+    NgForOf,
+    CurrencyPipe,
+    AsyncPipe,
+    NgIf,
+    RouterLink,
+  ],
 })
 export class StoreComponent {
   selectedCategory$ = new BehaviorSubject<string | undefined>(undefined);

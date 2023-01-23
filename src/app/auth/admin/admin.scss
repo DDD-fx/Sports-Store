@@ -1,0 +1,33 @@
+mat-toolbar span {
+  flex: 1 1 auto;
+}
+
+.menu-button {
+  width: 100%;
+  font-size: 1rem;
+}
+
+.menu-button .mat-icon {
+  margin-right: 10px;
+}
+
+.menu-button span {
+  flex: 1 1 auto;
+}
+
+mat-sidenav {
+  margin: 10px;
+  width: 190px;
+  border-radius: 4px;
+  padding: 15px 4px 4px;
+}
+
+mat-sidenav .mat-divider {
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 80px);
+}
+

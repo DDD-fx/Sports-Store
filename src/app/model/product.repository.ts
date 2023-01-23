@@ -31,4 +31,27 @@ export class ProductRepositoryService {
   getProduct(id: number): Observable<Product | undefined> {
     return this.products$.pipe(map((products) => products.find((p) => p.id == id)));
   }
+
+  saveProduct(product: Product) {
+    // if (product.id == null || product.id == 0) {
+    //   this.apiService.saveProduct(product).subscribe((p) => this.products.push(p));
+    // } else {
+    //   this.apiService.updateProduct(product).subscribe((p) => {
+    //     this.products.splice(
+    //       this.products.findIndex((p) => p.id == product.id),
+    //       1,
+    //       product
+    //     );
+    //   });
+    // }
+  }
+
+  deleteProduct(id: number) {
+    // this.apiService.deleteProduct(id).subscribe((p) => {
+    //   this.products.splice(
+    //     this.products.findIndex((p) => p.id == id),
+    //     1
+    //   );
+    // });
+  }
 }

@@ -5,6 +5,7 @@
       <app-cart-summary></app-cart-summary>
     </div>
   </div>
+
   <div class="row text-white">
     <div class="col-3 p-2">
       <div class="d-grid gap-2">
@@ -17,8 +18,13 @@
                 (click)="changeCategory(cat)">
           {{cat}}
         </button>
+
+        <button class="btn btn-danger mt-5" routerLink="/admin">
+          Admin
+        </button>
       </div>
     </div>
+
     <div class="col-9 p-2 text-dark">
       <div *ngFor="let product of (products$ | async)" class="card m-1 p-1 bg-light">
         <h4>
@@ -56,5 +62,6 @@
         </button>
       </div>
     </div>
+
   </div>
 </div>
