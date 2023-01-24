@@ -1,9 +1,11 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   DoCheck,
   IterableDiffer,
   IterableDiffers,
+  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +14,7 @@ import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ProductRepositoryService } from '../../../model/product.repository';
 import { Product } from '../../../model/product.model';
 import { map, Observable } from 'rxjs';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-product-table',
@@ -19,9 +22,16 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./product-table.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatButtonModule, RouterLink, CurrencyPipe, AsyncPipe],
+  imports: [
+    MatTableModule,
+    MatButtonModule,
+    RouterLink,
+    CurrencyPipe,
+    AsyncPipe,
+    MatPaginatorModule,
+  ],
 })
-export class ProductTableComponent implements DoCheck {
+export class ProductTableComponent implements DoCheck, AfterViewInit {
   columnsToDisplay: string[] = ['id', 'name', 'category', 'price', 'buttons'];
 
   private dataSource = new MatTableDataSource<Product>();
@@ -35,6 +45,8 @@ export class ProductTableComponent implements DoCheck {
       })
     );
 
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+
   differ!: IterableDiffer<Product>;
 
   constructor(
@@ -43,6 +55,10 @@ export class ProductTableComponent implements DoCheck {
     differs: IterableDiffers
   ) {
     // this.differ = differs.find(this.repository.getProducts()).create();
+  }
+
+  ngAfterViewInit() {
+    if (this.paginator) this.dataSource.paginator = this.paginator;
   }
 
   ngDoCheck() {

@@ -1,10 +1,20 @@
 .mat-mdc-unelevated-button {
   margin-left: 5px;
-  margin-top: 10px;
 }
 
-.admin-table .mdc-data-table__header-cell {
-  font-size: 22px;
+.mdc-data-table__header-cell {
+  font-size: 18px;
   font-weight: bold;
 }
 
+.bottom-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.bottom-box mat-paginator {
+  font-size: 14px;
+  background-color: #303030;
+}
