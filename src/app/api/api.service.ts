@@ -20,7 +20,7 @@ export class ApiService {
   }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl + 'products').pipe(shareReplay(1));
+    return this.http.get<Product[]>(this.baseUrl + 'products');
   }
 
   saveOrder(order: OrderService): Observable<HttpResponse<OrderService>> {

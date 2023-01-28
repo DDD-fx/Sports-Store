@@ -26,7 +26,7 @@ export class ProductEditorComponent {
     private router: Router,
     activeRoute: ActivatedRoute
   ) {
-    this.editing = activeRoute.snapshot.params['mode'] == 'edit';
+    this.editing = activeRoute.snapshot.params['mode'] === 'edit';
     if (this.editing) {
       Object.assign(this.product, repository.getProduct(activeRoute.snapshot.params['id']));
     }

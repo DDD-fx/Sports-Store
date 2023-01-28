@@ -1,15 +1,40 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Product } from './product.model';
-import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  shareReplay,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductRepositoryService {
-  public products$: Observable<Product[]> = this.apiService.getProducts();
+export class ProductRepositoryService implements OnDestroy {
+  private _updateProducts$ = new BehaviorSubject<void>(undefined);
+
+  public products$: Observable<Product[]> = this._updateProducts$.pipe(
+    switchMap(() => this.apiService.getProducts()),
+    tap((products) => (this.products = products)),
+    shareReplay(1)
+  );
+
+  public products: Product[] = [];
+
+  private destroy$ = new Subject<boolean>();
 
   constructor(private apiService: ApiService) {}
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
 
   getProducts(category$: BehaviorSubject<string | undefined>): Observable<Product[]> {
     return combineLatest([this.products$, category$]).pipe(
@@ -28,30 +53,28 @@ export class ProductRepositoryService {
     );
   }
 
-  getProduct(id: number): Observable<Product | undefined> {
-    return this.products$.pipe(map((products) => products.find((p) => p.id == id)));
+  getProduct(id: string): Product | undefined {
+    return this.products.find((p) => p.id === Number(id));
   }
 
-  saveProduct(product: Product) {
-    // if (product.id == null || product.id == 0) {
-    //   this.apiService.saveProduct(product).subscribe((p) => this.products.push(p));
-    // } else {
-    //   this.apiService.updateProduct(product).subscribe((p) => {
-    //     this.products.splice(
-    //       this.products.findIndex((p) => p.id == product.id),
-    //       1,
-    //       product
-    //     );
-    //   });
-    // }
+  saveProduct(product: Product): void {
+    if (!product.id) {
+      this.apiService
+        .saveProduct(product)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this._updateProducts$.next());
+    } else {
+      this.apiService
+        .updateProduct(product)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this._updateProducts$.next());
+    }
   }
 
-  deleteProduct(id: number) {
-    // this.apiService.deleteProduct(id).subscribe((p) => {
-    //   this.products.splice(
-    //     this.products.findIndex((p) => p.id == id),
-    //     1
-    //   );
-    // });
+  deleteProduct(id: number): void {
+    this.apiService
+      .deleteProduct(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this._updateProducts$.next());
   }
 }

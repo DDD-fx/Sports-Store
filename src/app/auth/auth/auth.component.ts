@@ -13,13 +13,13 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
   imports: [NgIf, RouterLink, FormsModule, AsyncPipe],
 })
 export class AuthComponent implements OnDestroy {
-  username?: string;
+  public username?: string;
 
-  password?: string;
+  public password?: string;
 
-  errorMessage$ = new BehaviorSubject<string | null>(null);
+  public errorMessage$ = new BehaviorSubject<string | null>(null);
 
-  destroy$ = new Subject<boolean>();
+  private destroy$ = new Subject<boolean>();
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -37,8 +37,9 @@ export class AuthComponent implements OnDestroy {
         .subscribe((response) => {
           if (response) {
             void this.router.navigateByUrl('/admin/main');
+          } else {
+            this.errorMessage$.next('Authentication Failed');
           }
-          this.errorMessage$.next('Authentication Failed');
         });
     } else {
       this.errorMessage$.next('Form Data Invalid');

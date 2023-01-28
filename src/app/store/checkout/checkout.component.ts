@@ -4,7 +4,7 @@ import { OrderService } from '../../model/order.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AsyncPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { catchError, ignoreElements, Observable, of } from 'rxjs';
+import { catchError, ignoreElements, Observable, of, tap } from 'rxjs';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
@@ -32,13 +32,14 @@ export class CheckoutComponent {
   submitOrder(form: NgForm) {
     this.submitted = true;
     if (form.valid) {
-      this.submitResponse$ = this.orderRepositoryService.saveOrder(this.orderService);
+      this.submitResponse$ = this.orderRepositoryService
+        .saveOrder(this.orderService)
+        .pipe(tap(() => this.orderService.clear()));
       this.submitError$ = this.submitResponse$.pipe(
         ignoreElements(),
         catchError((err: HttpErrorResponse) => of(err))
       );
 
-      this.orderService.clear();
       this.orderSent = true;
       this.submitted = false;
     }

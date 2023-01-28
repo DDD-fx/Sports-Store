@@ -1,0 +1,25 @@
+mat-checkbox {
+  margin: 10px;
+  font-size: large;
+}
+
+td.no-data {
+  font-size: large;
+}
+
+table.orders tbody, table.orders thead {
+  vertical-align: top
+}
+
+table.orders td {
+  padding-top: 10px;
+}
+
+table.orders table th:first-of-type, table.orders table td:first-of-type {
+  margin: 0;
+  padding: 0;
+}
+
+.mat-mdc-unelevated-button {
+  margin-left: 5px;
+}

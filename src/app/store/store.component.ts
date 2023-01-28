@@ -7,10 +7,12 @@ import { CounterDirective } from './counter.directive';
 import { AsyncPipe, CurrencyPipe, NgForOf, NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
+  styleUrls: ['./store.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -21,6 +23,7 @@ import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
     AsyncPipe,
     NgIf,
     RouterLink,
+    MatProgressSpinnerModule,
   ],
 })
 export class StoreComponent {
