@@ -18,8 +18,6 @@ export class OrderRepositoryService implements OnDestroy {
 
   private orders: OrderService[] = [];
 
-  // private loaded: boolean = false;
-
   private destroy$ = new Subject<boolean>();
 
   constructor(private apiService: ApiService) {}
@@ -30,17 +28,10 @@ export class OrderRepositoryService implements OnDestroy {
   }
 
   loadOrders(): Observable<OrderService[]> {
-    // this.loaded = true;
     return this.apiService.getOrders();
   }
 
-  // getOrders(): OrderService[] {
-  //   if (!this.loaded) this.loadOrders();
-  //   return this.orders;
-  // }
-
   saveOrder(order: OrderService): Observable<HttpResponse<OrderService>> {
-    // this.loaded = false;
     return this.apiService.saveOrder(order).pipe(tap(() => this._updateOrders$.next()));
   }
 
