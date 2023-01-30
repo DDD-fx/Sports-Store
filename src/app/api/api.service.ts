@@ -4,8 +4,8 @@ import { map, Observable, shareReplay } from 'rxjs';
 import { Product } from '../model/product.model';
 import { OrderService } from '../model/order.service';
 
-const PROTOCOL = 'http';
-const PORT = 3500;
+// const PROTOCOL = 'http';
+// const PORT = 3500;
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,8 @@ export class ApiService {
   auth_token?: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = `${PROTOCOL}://${location.hostname}:${PORT}/`;
+    // this.baseUrl = `${PROTOCOL}://${location.hostname}:${PORT}/`;
+    this.baseUrl = '/api/';
   }
 
   getProducts(): Observable<Product[]> {
