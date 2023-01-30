@@ -3,6 +3,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.4.
 
 ## Features
+- [x] only standalone components. No modules
 - [x] mostly based on async pipe
 - [x] custom pagination directive for main page
 - [x] added service worker for **offline** shopping (use HTTPS with your own certs. Add `sports_store_cert.pem` and `sports_store_key.pem` to the `ssl` folder).
